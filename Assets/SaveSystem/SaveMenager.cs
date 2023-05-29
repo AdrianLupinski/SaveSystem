@@ -15,6 +15,8 @@ public class SaveMenager : MonoBehaviour
 
     private FileDataHandler fileHandler;
 
+    private CloudDataHandler cloudDataHandler;
+
     public List<IUpdateGameData> gameDataObjects;
 
     public static SaveMenager instance { get; private set; }
@@ -33,6 +35,7 @@ public class SaveMenager : MonoBehaviour
     private void Start()
     {
         this.fileHandler = new FileDataHandler(Application.persistentDataPath, filename, encryptData);
+        this.cloudDataHandler = new CloudDataHandler(filename, encryptData);
         gameDataObjects = FindAllUpdateGamaDataObjects();
         LoadGameFromFile();
     }
@@ -67,8 +70,16 @@ public class SaveMenager : MonoBehaviour
         {
             gameDataObject.LoadData(gameData);
         }
+    }
 
-        Debug.Log(gameData.someInt);
+    public void SaveGameToCloud()
+    {
+        cloudDataHandler.SaveGame(gameData);
+    }
+
+    public void LoadGameFromCloud()
+    {
+        cloudDataHandler.LoadSomeData();
     }
 
     private List<IUpdateGameData> FindAllUpdateGamaDataObjects()
@@ -77,4 +88,6 @@ public class SaveMenager : MonoBehaviour
 
         return new List<IUpdateGameData>(updateGameDataObjects);
     }
+
+
 }

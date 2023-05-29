@@ -6,7 +6,7 @@ using System.Linq;
 public class SaveMenager : MonoBehaviour
 {
 
-    public GameData gameData;
+    private GameData gameData;
 
     [SerializeField]
     private string filename;
@@ -34,7 +34,7 @@ public class SaveMenager : MonoBehaviour
     {
         this.fileHandler = new FileDataHandler(Application.persistentDataPath, filename, encryptData);
         gameDataObjects = FindAllUpdateGamaDataObjects();
-        LoadGame();
+        LoadGameFromFile();
     }
 
 
@@ -43,7 +43,7 @@ public class SaveMenager : MonoBehaviour
         gameData = new GameData();
     }
 
-    public void SaveGame()
+    public void SaveGameToFile()
     {
         foreach (var gameDataObject in gameDataObjects)
         {
@@ -53,7 +53,7 @@ public class SaveMenager : MonoBehaviour
         fileHandler.SaveGame(gameData);
     }
 
-    public void LoadGame()
+    public void LoadGameFromFile()
     {
         gameData = fileHandler.Load();
 
@@ -68,6 +68,7 @@ public class SaveMenager : MonoBehaviour
             gameDataObject.LoadData(gameData);
         }
 
+        Debug.Log(gameData.someInt);
     }
 
     private List<IUpdateGameData> FindAllUpdateGamaDataObjects()
